@@ -1,0 +1,45 @@
+name: Delete Files Older Than 15 Days
+
+on:
+  schedule:
+    - cron: '0 4 * * *'  # Runs every day at 4:00 UTC
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete old files
+        run: |
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          REPO="MariapChee/Test"
+          BRANCH="main"
+          API="https://api.github.com/repos/${REPO}/contents"
+          
+          echo "Fetching file list..."
+          curl -s -H "Authorization: token $TOKEN" "$API" > files.json
+          cat files.json | jq -c '.[]' | while read -r file; do
+            path=$(echo "$file" | jq -r '.path')
+            sha=$(echo "$file" | jq -r '.sha')
+            name=$(echo "$file" | jq -r '.name')
+            url="https://api.github.com/repos/${REPO}/commits?path=${path}&page=1&per_page=1"
+            commit_date=$(curl -s -H "Authorization: token $TOKEN" "$url" | jq -r '.[0].commit.author.date')
+
+            if [ "$commit_date" != "null" ]; then
+              # Convert ISO time to seconds
+              commit_sec=$(date -d "$commit_date" +%s)
+              now_sec=$(date +%s)
+              age_days=$(( (now_sec - commit_sec) / 86400 ))
+
+              if [ "$age_days" -gt 15 ]; then
+                echo "⏳ Deleting $name (age: $age_days days)"
+                curl -X DELETE -s \
+                  -H "Authorization: token $TOKEN" \
+                  -H "Accept: application/vnd.github.v3+json" \
+                  -d "{\"message\": \"Delete $name (auto 15-day cleanup)\", \"sha\": \"$sha\", \"branch\": \"$BRANCH\"}" \
+                  "$API/$path"
+              else
+                echo "✅ Skipping $name (only $age_days days old)"
+              fi
+            fi
+          done
