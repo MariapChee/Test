@@ -1,6 +1,7 @@
-# Crynos Executor v2.0
+# Crynos Executor v3.0
 
 Advanced Roblox Script Executor built with C++ and Dear ImGui.
+**Mobile CoreGui Style | Free Built-in AI | No API Key Required**
 
 ## Features
 
@@ -11,7 +12,13 @@ Advanced Roblox Script Executor built with C++ and Dear ImGui.
   - **Rscripts** - Community-driven script collection
   - **ScriptSearch** - Fast script search engine
   - **RawScripts** - Raw script repository
-- **AI Chat Assistant** - GPT-4o-mini powered Lua/Luau script generator with code insertion
+- **Built-in Free AI** - Crynos AI generates Lua scripts with 20+ templates, no API key needed:
+  - Speed, Fly, ESP/Wallhack, Teleport, God Mode, Noclip
+  - Infinite Jump, Auto Farm, Aimbot, Kill Aura
+  - Teleport GUI, Jump Power, Low Gravity, Fullbright
+  - Click Teleport, Anti-AFK, Chat Spam, Mega Combo
+  - Rejoin, Server Hop, Character Size, Bring All Players
+  - Custom script generation for any request
 - **Saved Scripts Manager** - Save, export (.lua), search, and organize scripts locally
 - **Advanced Settings**:
   - 10 accent colors (Cyan, Blue, Purple, Pink, Red, Orange, Yellow, Green, Teal, Indigo)

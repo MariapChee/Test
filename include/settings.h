@@ -23,7 +23,6 @@ struct ExecutorSettings {
     bool show_fps = true;
     bool confirm_execute = false;
     bool minimize_to_tray = false;
-    std::string ai_api_key;
 };
 
 struct LanguageInfo {
@@ -50,8 +49,6 @@ public:
 private:
     ExecutorSettings settings_;
     static std::vector<LanguageInfo> languages_;
-    char api_key_buf_[256] = "";
-    bool show_api_key_ = false;
 
     std::string get_save_path() const;
     void render_general(float width);

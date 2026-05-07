@@ -61,20 +61,20 @@ void Theme::rebuild_colors() {
 void Theme::apply() {
     ImGuiStyle& style = ImGui::GetStyle();
 
-    style.WindowRounding = 8.0f;
-    style.FrameRounding = 6.0f;
-    style.TabRounding = 4.0f;
-    style.ScrollbarRounding = 6.0f;
-    style.GrabRounding = 4.0f;
-    style.ChildRounding = 6.0f;
-    style.PopupRounding = 6.0f;
+    style.WindowRounding = 12.0f;
+    style.FrameRounding = 10.0f;
+    style.TabRounding = 8.0f;
+    style.ScrollbarRounding = 10.0f;
+    style.GrabRounding = 8.0f;
+    style.ChildRounding = 10.0f;
+    style.PopupRounding = 10.0f;
 
-    style.WindowPadding = ImVec2(12, 12);
-    style.FramePadding = ImVec2(8, 5);
-    style.ItemSpacing = ImVec2(8, 6);
-    style.ItemInnerSpacing = ImVec2(6, 4);
-    style.ScrollbarSize = 12.0f;
-    style.GrabMinSize = 8.0f;
+    style.WindowPadding = ImVec2(14, 14);
+    style.FramePadding = ImVec2(10, 7);
+    style.ItemSpacing = ImVec2(10, 8);
+    style.ItemInnerSpacing = ImVec2(8, 6);
+    style.ScrollbarSize = 14.0f;
+    style.GrabMinSize = 12.0f;
 
     style.WindowBorderSize = 1.0f;
     style.ChildBorderSize = 1.0f;

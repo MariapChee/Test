@@ -14,7 +14,7 @@ static void glfw_error_callback(int error, const char* description) {
 
 App::App() {
     script_hub_ = std::make_unique<ScriptHub>(http_);
-    ai_chat_ = std::make_unique<AiChat>(http_);
+    ai_chat_ = std::make_unique<AiChat>();
 }
 
 App::~App() {
@@ -34,7 +34,7 @@ bool App::init() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-    window_ = glfwCreateWindow(window_width_, window_height_, "Crynos Executor v2.0 | Advanced Roblox Script Executor", nullptr, nullptr);
+    window_ = glfwCreateWindow(window_width_, window_height_, "Crynos Executor v3.0 | Mobile CoreGui Style | Free AI", nullptr, nullptr);
     if (!window_) {
         fprintf(stderr, "Failed to create GLFW window\n");
         glfwTerminate();
@@ -63,7 +63,7 @@ bool App::init() {
     console_.add_log("Window initialized (" + std::to_string(window_width_) + "x" + std::to_string(window_height_) + ")", LogType::System, "[System]");
     console_.add_log("OpenGL renderer ready", LogType::System, "[System]");
     console_.add_log("Script Hub: 4 APIs loaded (ScriptBlox, Rscripts, ScriptSearch, RawScripts)", LogType::ScriptHub, "[ScriptHub]");
-    console_.add_log("AI Assistant ready - Configure API key in Settings for full functionality", LogType::AI, "[AI]");
+    console_.add_log("AI Assistant ready - Built-in free AI with 20+ script templates", LogType::AI, "[AI]");
     console_.add_log("Press Ctrl+Enter to execute | Ctrl+S to save | Ctrl+N for new tab", LogType::Info, "[Shortcuts]");
 
     return true;
@@ -167,11 +167,11 @@ void App::render_header() {
     ImGui::Text("CRYNOS");
     ImGui::PopStyleColor();
     ImGui::SameLine();
-    ImGui::TextColored(Theme::colors().text_dim, "Executor v2.0");
+    ImGui::TextColored(Theme::colors().text_dim, "Executor v3.0");
 
-    // Navigation tabs
-    float tab_start = 220;
-    float tab_width = 100;
+    // Navigation tabs - responsive for mobile
+    float tab_start = std::min(220.0f, (float)window_width_ * 0.18f);
+    float tab_width = std::max(70.0f, std::min(100.0f, ((float)window_width_ - tab_start - 400) / 5.0f));
     ImGui::SetCursorPos(ImVec2(tab_start, 6));
 
     struct TabInfo {
@@ -206,7 +206,7 @@ void App::render_header() {
     }
 
     // Right side - Execute & connection status
-    float right_x = (float)window_width_ - 360;
+    float right_x = std::max(tab_start + tab_width * 5 + 20, (float)window_width_ - 360.0f);
     ImGui::SetCursorPos(ImVec2(right_x, 8));
 
     // Execute button
@@ -528,8 +528,6 @@ void App::apply_settings() {
     editor_.set_line_numbers(s.line_numbers);
     editor_.set_auto_indent(s.auto_indent);
     console_.set_max_logs(s.max_console_logs);
-    ai_chat_->set_api_key(s.ai_api_key);
-
     Theme::set_accent(s.accent_index);
     Theme::set_background(s.background_index);
     Theme::set_transparency(s.transparency);

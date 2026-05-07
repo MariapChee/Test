@@ -63,12 +63,6 @@ void Settings::load_from_disk() {
         settings_.max_console_logs = j.value("max_console_logs", 5000);
         settings_.show_fps = j.value("show_fps", true);
         settings_.confirm_execute = j.value("confirm_execute", false);
-        settings_.ai_api_key = j.value("ai_api_key", "");
-
-        if (!settings_.ai_api_key.empty()) {
-            strncpy(api_key_buf_, settings_.ai_api_key.c_str(), sizeof(api_key_buf_) - 1);
-        }
-
         Theme::set_accent(settings_.accent_index);
         Theme::set_background(settings_.background_index);
         Theme::set_transparency(settings_.transparency);
@@ -95,7 +89,6 @@ void Settings::save_to_disk() {
         {"max_console_logs", settings_.max_console_logs},
         {"show_fps", settings_.show_fps},
         {"confirm_execute", settings_.confirm_execute},
-        {"ai_api_key", settings_.ai_api_key},
     };
     Utils::write_file(get_save_path(), j.dump(2));
 }
@@ -302,16 +295,9 @@ void Settings::render_advanced(float width) {
 
     ImGui::Spacing();
 
-    ImGui::TextColored(Theme::colors().accent, "AI API Key (OpenAI):");
-    ImGui::SetNextItemWidth(width - 100);
-    ImGuiInputTextFlags flags = show_api_key_ ? 0 : ImGuiInputTextFlags_Password;
-    if (ImGui::InputText("##api_key", api_key_buf_, sizeof(api_key_buf_), flags)) {
-        settings_.ai_api_key = api_key_buf_;
-    }
-    ImGui::SameLine();
-    if (ImGui::Button(show_api_key_ ? "Hide" : "Show")) {
-        show_api_key_ = !show_api_key_;
-    }
+    ImGui::TextColored(Theme::colors().success, "AI: Built-in Free (No API Key Required)");
+    ImGui::TextColored(Theme::colors().text_dim, "Crynos AI uses a built-in script generator with 20+ templates.");
+    ImGui::TextColored(Theme::colors().text_dim, "No external API or internet connection needed for AI.");
 
     ImGui::Spacing();
     ImGui::TextColored(Theme::colors().text_dim, "Data directory: %s", Utils::get_data_dir().c_str());
@@ -322,16 +308,17 @@ void Settings::render_advanced(float width) {
 void Settings::render_about(float width) {
     ImGui::Indent(10);
 
-    ImGui::TextColored(Theme::colors().accent, "Crynos Executor v2.0");
+    ImGui::TextColored(Theme::colors().accent, "Crynos Executor v3.0");
     ImGui::Spacing();
     ImGui::TextColored(Theme::colors().text, "Advanced Roblox Script Executor");
     ImGui::TextColored(Theme::colors().text_dim, "Built with C++ / Dear ImGui / OpenGL");
+    ImGui::TextColored(Theme::colors().text_dim, "Mobile CoreGui Style | Free Built-in AI");
     ImGui::Spacing();
     ImGui::TextColored(Theme::colors().text_dim, "Features:");
     ImGui::BulletText("Multi-tab script editor with line numbers");
     ImGui::BulletText("Dual console (Crynos + Roblox) with filtering");
     ImGui::BulletText("Script Hub with 4 search APIs");
-    ImGui::BulletText("AI-powered Lua script generation");
+    ImGui::BulletText("Built-in free AI with 20+ script templates");
     ImGui::BulletText("Customizable themes and accent colors");
     ImGui::BulletText("22 language localization support");
     ImGui::BulletText("FPS counter and performance tools");
